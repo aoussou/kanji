@@ -14,6 +14,9 @@ kata_tupple = ('ア','イ','ウ','エ','オ','カ','キ','ク','ケ','コ','サ'
 
 df = pd.read_csv("./bunka.csv")
 
+
+
+
 kanji_dict = {}
 for i,row in df.iterrows():
     
@@ -51,7 +54,7 @@ for i,row in df.iterrows():
         for char in hira_tupple:
             if char in l:
                 
-                kun_yomi["kyunyomi" + str(len(kun_yomi) + 1)] = {
+                kun_yomi["kunyomi" + str(len(kun_yomi) + 1)] = {
                     "pronunciation": l,
                     "examples": examples_line_break_down[j]
                     }
@@ -61,8 +64,25 @@ for i,row in df.iterrows():
     kanji_dict[kanji] = {"on": on_yomi, "kun": kun_yomi}
     print(i,kanji)    
     # print(i,kanji,len(pronoun_line_break_down)-len(examples_line_break_down))
+
+kanken_kanjis = pd.read_csv("./kanken_kanji.csv")
+columns = kanken_kanjis.columns
+
+for kyu in columns:
     
+    c = kanken_kanjis[kyu].dropna().tolist()
     
+    for kanji in c:
+        
+        info = kanji_dict[kanji]
+        kanji_dict[kanji] = {"on": info["on"], "kun": info["kun"], "kyu": kyu[:-1]}
+    
+for kanji, info in kanji_dict.items():
+    
+    if len(info)<3:
+        kanji_dict[kanji] = {"on": info["on"], "kun": info["kun"], "kyu": 2}
+        
+
 with open("kanji_bunka.json", 'w') as fp:
     json.dump(kanji_dict, fp)
 fp.close()
