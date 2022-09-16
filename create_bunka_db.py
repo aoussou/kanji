@@ -47,7 +47,7 @@ for i,row in df.iterrows():
                 
                 on_yomi["onyomi" + str(len(on_yomi) + 1)] = {
                     "pronunciation": l,
-                    "examples": examples_line_break_down[j]
+                    "examples": examples_line_break_down[j].split("，")
                     }
                 break
             
@@ -56,7 +56,7 @@ for i,row in df.iterrows():
                 
                 kun_yomi["kunyomi" + str(len(kun_yomi) + 1)] = {
                     "pronunciation": l,
-                    "examples": examples_line_break_down[j]
+                    "examples": examples_line_break_down[j].split("，")
                     }
                 break
 
