@@ -1,0 +1,25 @@
+couldn't find base pronunciation for 羽 in 一羽 going with は
+couldn't find base pronunciation for 羽 in 三羽 going with は
+couldn't find base pronunciation for 羽 in 六羽 going with は
+couldn't find base pronunciation for 苦 in 苦り切る going with にがる
+couldn't find base pronunciation for 巧 in 巧みな術 going with たくみ
+couldn't find base pronunciation for 三 in 三つ指 going with みつ
+couldn't find base pronunciation for 四 in 四つ角 going with よつ
+couldn't find base pronunciation for 足 in 舌足らず going with たる
+couldn't find base pronunciation for 得 in 得るところ going with うる
+couldn't find base pronunciation for 八 in 八つ当たり going with やつ
+couldn't find base pronunciation for 並 in 足並み going with なみ
+couldn't find base pronunciation for 飽 in ……に飽かして going with あかす
+couldn't find base pronunciation for 明 in 明くる日 going with あくる
+couldn't find base pronunciation for 明 in 明くる朝 going with あくる
+couldn't find base pronunciation for 来 in 来る○日 going with きたる
+couldn't find base pronunciation for 隣 in 隣り合う going with となる
+
+ambiguous
+couldn't find base pronunciation for 四 in 四日 going with よ
+couldn't find base pronunciation for 黄 in 黄金 going with こ （こがね）
+
+interesting
+couldn't find base pronunciation for 七 in 七月目 going with なな
+couldn't find base pronunciation for 六 in 六月目 going with む
+couldn't find base pronunciation for 四 in 四月目 going with よ

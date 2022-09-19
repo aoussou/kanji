@@ -15,17 +15,13 @@ kata_tupple = ('ア','イ','ウ','エ','オ','カ','キ','ク','ケ','コ','サ'
 df = pd.read_csv("./bunka.csv")
 
 
-def populateDict(dict_,most_common_word_pronunciation,example_list,pronunciation_type,kanji=None):
+def populateDict(dict_,most_common_word_pronunciation,example_list,pronunciation_type,kanji):
     
     populated_dict = dict_
     
-    # example_list = examples_line_break_down[j].split("，")
-    # if '' in example_list: example_list.remove('')
     
     example_dict = dict()
     
-    # if kanji is not None:
-    #     print(kanji,example_list)
 
     for i,example in enumerate(example_list):
   
@@ -35,9 +31,13 @@ def populateDict(dict_,most_common_word_pronunciation,example_list,pronunciation
         if ind_parenthesis != -1:
             example = example[:ind_parenthesis]
 
-        whole_word_furigana = getTargetWordFurigana(example,most_common_word_pronunciation)
+
+                  
+
+        # if example == '獲る':      
+        #     print(example,most_common_word_pronunciation,whole_word_furigana)
         
-        
+            
 
         # If it's a kunyomi, you might need to remove the okurgianas 
         if pronunciation_type == "kun":
@@ -48,24 +48,37 @@ def populateDict(dict_,most_common_word_pronunciation,example_list,pronunciation
 
             if i == 0:
                 
-                stem_furigana = removeOkurigana(example,whole_word_furigana)
+                base_pronunciation = getBasePronunciationKunYomi(kanji,example,most_common_word_pronunciation)
+                # print(base_pronunciation)
+
+                # if example == '獲る':
+                #     print(example,'*', most_common_word_pronunciation,'*',whole_word_furigana,'*',stem_furigana)
+                #     STOP
+            # else:
+            # print("k:",kanji,"e:",example,"w:",most_common_word_pronunciation,"b:",base_pronunciation)
             
-            # print("whole:", whole_word_furigana,"stem:",stem_furigana)
-            
-            if len(whole_word_furigana) == 0:
-                target_furigana = stem_furigana
-                base_pronunciation = stem_furigana
-            elif len(stem_furigana) == 0:
-                target_furigana = whole_word_furigana
-                base_pronunciation = whole_word_furigana
+            if len(base_pronunciation) != 0 : 
+                target_furigana = getTargetWordFurigana(example,base_pronunciation)
+                if target_furigana == "" : target_furigana = base_pronunciation
             else:
-                target_furigana = whole_word_furigana[:len(stem_furigana)]
-                base_pronunciation = stem_furigana
+                print("couldn't find base pronunciation for",kanji,"in",example,"going with",most_common_word_pronunciation)
+                target_furigana = most_common_word_pronunciation
+            
+            # if len(whole_word_furigana) == 0:
+            #     target_furigana = stem_furigana
+            #     base_pronunciation = stem_furigana
+            # elif len(stem_furigana) == 0:
+            #     target_furigana = whole_word_furigana
+            #     base_pronunciation = whole_word_furigana
+            # else:
+            #     target_furigana = whole_word_furigana[:len(stem_furigana)]
+            #     base_pronunciation = stem_furigana
             # print("base:", base_pronunciation,"example:",example,"whole_word_furigana",whole_word_furigana,"stem_furigana",stem_furigana)
         else:
             base_pronunciation = most_common_word_pronunciation
-            target_furigana = whole_word_furigana
+            target_furigana =  getTargetWordFurigana(example,most_common_word_pronunciation)
 
+        # print(kanji,example)
         example_dict[example] = target_furigana
         
 
@@ -82,10 +95,14 @@ kanji_dict = dict()
 for i,row in df.iterrows():
     
     kanji = row["漢字"]
-    ind_parenthesis = kanji.find("（")
     
+    ind_parenthesis = kanji.find("（")
     if ind_parenthesis != -1:
         kanji = kanji[:ind_parenthesis]
+        
+    ind_bracket = kanji.find("［")
+    if ind_bracket != -1:
+        kanji = kanji[:ind_bracket]
 
     pronunciation = row["音訓"]
     pronun_line_break_down = pronunciation.split("\n")
@@ -104,7 +121,7 @@ for i,row in df.iterrows():
     
     if '\xa0 ' in pronun_line_break_down: pronun_line_break_down.remove('\xa0 ')
     
-    print(pronun_line_break_down,examples_line_break_down)
+
     for j, most_common_word_pronunciation in enumerate(pronun_line_break_down):
         
         most_common_word_pronunciation = most_common_word_pronunciation.replace('　','')
