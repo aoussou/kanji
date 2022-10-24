@@ -29,14 +29,7 @@ def populateDict(dict_,most_common_word_pronunciation,example_list,pronunciation
         ind_parenthesis = example.find("（")
         
         if ind_parenthesis != -1:
-            example = example[:ind_parenthesis]
-
-
-                  
-
-        # if example == '獲る':      
-        #     print(example,most_common_word_pronunciation,whole_word_furigana)
-        
+            example = example[:ind_parenthesis]      
             
 
         # If it's a kunyomi, you might need to remove the okurgianas 
@@ -49,34 +42,24 @@ def populateDict(dict_,most_common_word_pronunciation,example_list,pronunciation
             if i == 0:
                 
                 base_pronunciation = getBasePronunciationKunYomi(kanji,example,most_common_word_pronunciation)
-                # print(base_pronunciation)
 
-                # if example == '獲る':
-                #     print(example,'*', most_common_word_pronunciation,'*',whole_word_furigana,'*',stem_furigana)
-                #     STOP
-            # else:
-            # print("k:",kanji,"e:",example,"w:",most_common_word_pronunciation,"b:",base_pronunciation)
             
             if len(base_pronunciation) != 0 : 
                 target_furigana = getTargetWordFurigana(example,base_pronunciation)
-                if target_furigana == "" : target_furigana = base_pronunciation
+                if target_furigana == "" or len(target_furigana) < len(base_pronunciation) : 
+                    target_furigana = base_pronunciation
+                    print("0 couldn't find base pronunciation for",kanji,"in",example,"going with",base_pronunciation)
             else:
-                print("couldn't find base pronunciation for",kanji,"in",example,"going with",most_common_word_pronunciation)
+                print("1 couldn't find base pronunciation for",kanji,"in",example,"going with",most_common_word_pronunciation)
                 target_furigana = most_common_word_pronunciation
             
-            # if len(whole_word_furigana) == 0:
-            #     target_furigana = stem_furigana
-            #     base_pronunciation = stem_furigana
-            # elif len(stem_furigana) == 0:
-            #     target_furigana = whole_word_furigana
-            #     base_pronunciation = whole_word_furigana
-            # else:
-            #     target_furigana = whole_word_furigana[:len(stem_furigana)]
-            #     base_pronunciation = stem_furigana
-            # print("base:", base_pronunciation,"example:",example,"whole_word_furigana",whole_word_furigana,"stem_furigana",stem_furigana)
+            
         else:
             base_pronunciation = most_common_word_pronunciation
             target_furigana =  getTargetWordFurigana(example,most_common_word_pronunciation)
+            if target_furigana == "" : 
+                target_furigana = kata2hira(most_common_word_pronunciation)
+                print("2 couldn't find base pronunciation for",kanji,"in",example,"going with",most_common_word_pronunciation)
 
         # print(kanji,example)
         example_dict[example] = target_furigana

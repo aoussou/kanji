@@ -194,7 +194,29 @@ def getRendakuFuriganaList(base_pronunciation):
         return [base_pronunciation]
         
         
+def getMecabSimpleParserDict(str_):
+    
+    tagger = MeCab.Tagger()
+    str_parsing = tagger.parse(str_)
+    if 'EOS' in str_parsing: str_parsing = str_parsing.replace('EOS','')
+    
 
+    parsing_by_word = str_parsing.split("\n")
+
+    
+    if '' in parsing_by_word: parsing_by_word = list(filter(lambda a: a != '', parsing_by_word))
+ 
+    parsing_dict = dict()
+    for parsing_result in parsing_by_word:
+        parsing = parsing_result.split("	")   
+        
+        word = parsing[0]
+        parsing.pop(0)
+        parsing_dict[word] = parsing
+    
+    
+    
+    return parsing_dict
 
 
 
@@ -219,24 +241,35 @@ def getTargetWordFurigana(word,base_pronunciation):
     
     all_possible_furigana = rendaku_furigana_list
 
+    parsing_dict = getMecabSimpleParserDict(word)
+
+    if len(parsing_dict)>1:
+        print(word,"Warning! Mecab does't consider this a single word!")    
     
-    tagger = MeCab.Tagger()
-    foo = tagger.parse(word).split("	")
+    furigana_list = []
+    
 
-    hiragana_str = kata2hira(foo[2])
-
-    common_substrings = []
-    for r_word in all_possible_furigana:
+    for parsed_word, parsing in parsing_dict.items():
         
 
-        st = STree.STree([hiragana_str,r_word])
-        common_substrings.append(st.lcs())
-
-        
-
-    furigana = max(common_substrings, key=len)
+        hiragana_str = kata2hira(parsing[1])
     
-    return furigana
+        common_substrings = []
+        for r_word in all_possible_furigana:
+            
+    
+            st = STree.STree([hiragana_str,r_word])
+            common_substrings.append(st.lcs())
+    
+            
+    
+        furigana = max(common_substrings, key=len)
+        
+        furigana_list.append(furigana)
+
+    longest_furigana = max(furigana_list, key=len)
+    
+    return longest_furigana
 
 
 

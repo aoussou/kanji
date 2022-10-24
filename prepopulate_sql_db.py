@@ -37,14 +37,11 @@ data = json.load(open(os.path.join('.',"kanji_bunka.json")))
 #     names[8],
 #     )
 
-str_ = "INSERT INTO kankenVoc(%s,%s,%s,%s,%s,%s,%s) VALUES(?,?,?,?,?,?,?)" % (
+str_ = "INSERT INTO kankenVoc(%s,%s,%s,%s) VALUES(?,?,?,?)" % (
     names[1],
     names[2],
     names[3],
     names[4],
-    names[5],
-    names[6],
-    names[7],
     )
 
 
@@ -54,11 +51,11 @@ for kanji, entry in data.items():
     kyu = entry["kyu"]
     print(kanji,kyu)
     
-    # on = entry["on"]
-    kun = entry["kun"]
-    
-    if kun != {}:
-        for pronunciation_nbr, examples_list in kun.items():
+
+    # dict_ = entry["kun"]
+    dict_ = entry["on"]    
+    if dict_ != {}:
+        for pronunciation_nbr, examples_list in dict_.items():
     
             for word, pronunciation in examples_list["examples"].items():
             
@@ -67,9 +64,6 @@ for kanji, entry in data.items():
                         kanji,
                         pronunciation,
                         kyu,
-                        0,
-                        0,
-                        0
                         )
                             )
          
